@@ -9,9 +9,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://127.0.0.1:27017/studentdb')
+mongoose.connect('mongodb+srv://mohammedarshak793:UYnF%5E%23_Uk%23.2%245Y@cluster0.kgevxcb.mongodb.net/studentDB?retryWrites=true&w=majority&appName=Cluster0')
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.error("MongoDB Connection Error:", err));
+
 
 const studentSchema = new mongoose.Schema({
   name: String,
@@ -22,32 +23,32 @@ const studentSchema = new mongoose.Schema({
 
 const Student = mongoose.model('Student', studentSchema);
 
-// Add student
+
 app.post('/students', async (req, res) => {
   const student = new Student(req.body);
   await student.save();
   res.send(student);
 });
 
-// Get all students
+
 app.get('/students', async (req, res) => {
   const students = await Student.find();
   res.send(students);
 });
 
-// Get one student
+
 app.get('/students/:id', async (req, res) => {
   const student = await Student.findById(req.params.id);
   res.send(student);
 });
 
-// Update student
+
 app.put('/students/:id', async (req, res) => {
   const updated = await Student.findByIdAndUpdate(req.params.id, req.body, { new: true });
   res.send(updated);
 });
 
-// Delete student
+
 app.delete('/students/:id', async (req, res) => {
   try {
     await Student.findByIdAndDelete(req.params.id);
